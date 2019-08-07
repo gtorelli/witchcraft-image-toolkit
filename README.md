@@ -1,7 +1,7 @@
 # witchcraft-image-toolkit
 Set of functions using imagemagick and ffmpeg for batch image processing
 
-You need to create the folling folder structure before working with WIT:
+You need to create the following folder structure before execute WIT:
 
 ```
 |── frames
