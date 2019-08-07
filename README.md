@@ -5,12 +5,12 @@ You need to create the folling folder structure before working with WIT:
 
 frames/  
 libs/  
-├── ffmpeg/  
-│   ├── bin  
-│   ├── presets  
-├── imagemagick/  
-│   ├── images  
-│   ├── www  
+|-- ffmpeg/  
+|   |-- bin  
+|   |-- presets  
+|-- imagemagick/  
+|   |-- images  
+|   |-- www  
 videos/  
 WIT.bat  
 
