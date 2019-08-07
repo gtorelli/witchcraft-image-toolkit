@@ -17,6 +17,6 @@ You need to create the folling folder structure before working with WIT:
 
 ```
 
-libs:
-ffmpeg win64 build -> https://ffmpeg.zeranoe.com/builds/
+libs:  
+ffmpeg win64 build -> https://ffmpeg.zeranoe.com/builds/  
 imagemagick portable -> https://imagemagick.org/script/download.php
