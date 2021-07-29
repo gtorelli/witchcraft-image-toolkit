@@ -1,22 +1,9 @@
 # witchcraft-image-toolkit
 Set of functions using imagemagick and ffmpeg for batch image processing
 
-You need to create the following folder structure before execute WIT:
+Instructions:
 
-```
-|── frames
-|── libs
-    |── ffmpeg
-        |── bin
-        |── presets
-    |── imagemagick
-        |── images
-        |── www
-|── videos
-| WIT.bat
-
-```
-
-libs:  
-ffmpeg win64 build -> https://ffmpeg.zeranoe.com/builds/  
-imagemagick portable -> https://imagemagick.org/script/download.php
+1) install ffmpeg and imagemagick using Scoop (https://scoop.sh/);
+2) create 'videos' and 'frames' folder
+3) place video frames inside 'frames' folder
+3) run WIT.bat

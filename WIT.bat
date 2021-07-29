@@ -1,5 +1,5 @@
 :: WITCHCRAFT IMAGE TOOLKIT VERSION 1.8-2019
-:: Copyright (c) 2019 Gabriel Torelli.
+:: Copyright (c) 2021 Gabriel Torelli.
 ::  
 :: This program is free software: you can redistribute it and/or modify  
 :: it under the terms of the GNU General Public License as published by  
@@ -31,7 +31,7 @@
 	@echo                \::/  /        /:/  /       \:\__\  
 	@echo                 \/__/         \/__/         \/__/  
 	@echo [0m
-	@echo [42mVersion: 1.8-2019 [0m
+	@echo [32mVersion: 1.9-2021 [0m
 	@echo.
 	@echo                [92m W[0mITCHCRAFT [92m I[0mMAGE [92m T[0m00LKIT [0m         
 	@echo            Functions for Batch Image Processing    
@@ -75,35 +75,35 @@
 	for /r %%a in (frames\*.jpg) do (
     echo file '%%a' >> buffer.txt
 	)
-	libs\ffmpeg\bin\ffmpeg.exe -r %framerate% -f concat -safe 0 -i buffer.txt -vcodec mjpeg -qscale 0 videos/videoFrames.avi
+	ffmpeg -r %framerate% -f concat -safe 0 -i buffer.txt -vcodec mjpeg -qscale 0 videos/videoFrames.avi
 	del /q buffer.txt
 	goto :start2
 	
 	:X
 	set /p framerate=Enter the framerate (FPS):
 	set /p filename=Enter the filename in "videos" directory:
-	libs\ffmpeg\bin\ffmpeg.exe -i videos\%filename%.avi -r %framerate% videos\%%02d.jpg
+	ffmpeg -i videos\%filename%.avi -r %framerate% videos\%%02d.jpg
 	goto :start2
 	
 	:I
-	libs\imagemagick\mogrify.exe -format jpg frames\*.tif
+	mogrify -format jpg frames\*.tif
 	goto :start2
 	
 	:B
-	libs\imagemagick\mogrify.exe -format jpg frames\*.bmp
+	mogrify -format jpg frames\*.bmp
 	goto :start2
 	
 	:P
-	libs\imagemagick\mogrify.exe -format jpg frames\*.png
+	mogrify -format jpg frames\*.png
 	goto :start2	
 
 	:R
 	set /p resolution=Enter the resolution (ex.: 1024x768, 800x600, 500x480 ):
-	libs\imagemagick\mogrify.exe -resize %resolution%! frames\*
+	mogrify -resize %resolution%! frames\*
 	goto :start2
 	
 	:G
-	libs\ffmpeg\bin\ffmpeg.exe -i videos\video1.avi -i videos\video2.avi -i videos\video3.avi -i videos\video4.avi -filter_complex "nullsrc=size=2560x480 [base]; [0:v] setpts=PTS-STARTPTS [left]; [1:v] setpts=PTS-STARTPTS [middleleft]; [2:v] setpts=PTS-STARTPTS [middleright]; [3:v] setpts=PTS-STARTPTS [right]; [base][left] overlay=shortest=1 [tmp1]; [tmp1][middleleft] overlay=shortest=1:x=640 [tmp2]; [tmp2][middleright] overlay=shortest=1:x=1280 [tmp3]; [tmp3][right] overlay=shortest=1:x=1920" -qscale 0 videos\videoGrid.avi
+	ffmpeg -i videos\video1.avi -i videos\video2.avi -i videos\video3.avi -i videos\video4.avi -filter_complex "nullsrc=size=2560x480 [base]; [0:v] setpts=PTS-STARTPTS [left]; [1:v] setpts=PTS-STARTPTS [middleleft]; [2:v] setpts=PTS-STARTPTS [middleright]; [3:v] setpts=PTS-STARTPTS [right]; [base][left] overlay=shortest=1 [tmp1]; [tmp1][middleleft] overlay=shortest=1:x=640 [tmp2]; [tmp2][middleright] overlay=shortest=1:x=1280 [tmp3]; [tmp3][right] overlay=shortest=1:x=1920" -qscale 0 videos\videoGrid.avi
 	goto :start2
 	
 	:T
@@ -132,7 +132,7 @@
 	@echo.
 	set /p tagT1=Enter the tag:
 	set /p timeT1=Define the interval (start,end):
-	libs\ffmpeg\bin\ffmpeg.exe -i videos\%filename%.avi -vf drawtext="fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT1%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT1%)'" -qscale 0 -codec:a copy videos\videoTag1.avi
+	ffmpeg -i videos\%filename%.avi -vf drawtext="fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT1%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT1%)'" -qscale 0 -codec:a copy videos\videoTag1.avi
 	goto :start2
 	
 	:T2
@@ -142,7 +142,7 @@
 	set /p timeT1=Define the interval (start,end):
 	set /p tagT2=Enter the tag 2:
 	set /p timeT2=Define the interval (start,end):
-	libs\ffmpeg\bin\ffmpeg.exe -i videos\%filename%.avi -vf drawtext="fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT1%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT1%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT2%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT2%)'" -qscale 0 -codec:a copy videos\videoTag2.avi
+	ffmpeg -i videos\%filename%.avi -vf drawtext="fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT1%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT1%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT2%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT2%)'" -qscale 0 -codec:a copy videos\videoTag2.avi
 	goto :start2
 	
 	:T3
@@ -154,7 +154,7 @@
 	set /p timeT2=Define the interval (start,end):
 	set /p tagT3=Enter the tag 3:
 	set /p timeT3=Define the interval (start,end):
-	libs\ffmpeg\bin\ffmpeg.exe -i videos\%filename%.avi -vf drawtext="fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT1%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT1%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT2%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT2%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT3%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT3%)'" -qscale 0 -codec:a copy videos\videoTag3.avi
+	ffmpeg -i videos\%filename%.avi -vf drawtext="fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT1%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT1%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT2%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT2%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT3%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT3%)'" -qscale 0 -codec:a copy videos\videoTag3.avi
 	goto :start2
 	
 	:T4
@@ -168,7 +168,7 @@
 	set /p timeT3=Define the interval (start,end):
 	set /p tagT4=Enter the tag 4:
 	set /p timeT4=Define the interval (start,end):
-	libs\ffmpeg\bin\ffmpeg.exe -i videos\%filename%.avi -vf drawtext="fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT1%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT1%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT2%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT2%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT3%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT3%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT4%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT4%)'" -qscale 0 -codec:a copy videos\videoTag4.avi
+	ffmpeg -i videos\%filename%.avi -vf drawtext="fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT1%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT1%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT2%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT2%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT3%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT3%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT4%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT4%)'" -qscale 0 -codec:a copy videos\videoTag4.avi
 	goto :start2
 	
 	:T5
@@ -184,7 +184,7 @@
 	set /p timeT4=Define the interval (start,end):
 	set /p tagT4=Enter the tag 5:
 	set /p timeT4=Define the interval (start,end):
-	libs\ffmpeg\bin\ffmpeg.exe -i videos\%filename%.avi -vf drawtext="fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT1%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT1%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT2%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT2%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT3%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT3%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT4%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT4%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT5%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT5%)'" -qscale 0 -codec:a copy videos\videoTag5.avi
+	ffmpeg -i videos\%filename%.avi -vf drawtext="fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT1%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT1%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT2%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT2%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT3%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT3%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT4%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT4%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT5%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT5%)'" -qscale 0 -codec:a copy videos\videoTag5.avi
 	goto :start2
 	
 	:T6
@@ -202,7 +202,7 @@
 	set /p timeT5=Define the interval (start,end):
 	set /p tagT6=Enter the tag 6:
 	set /p timeT6=Define the interval (start,end):
-	libs\ffmpeg\bin\ffmpeg.exe -i videos\%filename%.avi -vf drawtext="fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT1%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT1%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT2%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT2%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT3%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT3%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT4%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT4%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT5%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT5%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT6%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT6%)''" -qscale 0 -codec:a copy videos\videoTag6.avi
+	ffmpeg -i videos\%filename%.avi -vf drawtext="fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT1%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT1%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT2%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT2%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT3%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT3%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT4%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT4%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT5%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT5%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT6%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT6%)''" -qscale 0 -codec:a copy videos\videoTag6.avi
 	goto :start2
 	
 	:T7
@@ -222,7 +222,7 @@
 	set /p timeT6=Define the interval (start,end):
 	set /p tagT7=Enter the tag 7:
 	set /p timeT7=Define the interval (start,end):
-	libs\ffmpeg\bin\ffmpeg.exe -i videos\%filename%.avi -vf drawtext="fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT1%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT1%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT2%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT2%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT3%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT3%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT4%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT4%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT5%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT5%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT6%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT6%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT7%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT7%)'" -qscale 0 -codec:a copy videos\videoTag7.avi
+	ffmpeg -i videos\%filename%.avi -vf drawtext="fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT1%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT1%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT2%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT2%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT3%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT3%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT4%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT4%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT5%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT5%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT6%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT6%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT7%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT7%)'" -qscale 0 -codec:a copy videos\videoTag7.avi
 	goto :start2
 	
 	:T8
@@ -244,7 +244,7 @@
 	set /p timeT7=Define the interval (start,end):
 	set /p tagT8=Enter the tag 8:
 	set /p timeT8=Define the interval (start,end):
-	libs\ffmpeg\bin\ffmpeg.exe -i videos\%filename%.avi -vf drawtext="fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT1%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT1%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT2%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT2%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT3%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT3%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT4%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT4%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT5%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT5%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT6%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT6%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT7%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT7%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT8%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT8%)'" -qscale 0 -codec:a copy videos\videoTag8.avi
+	ffmpeg -i videos\%filename%.avi -vf drawtext="fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT1%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT1%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT2%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT2%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT3%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT3%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT4%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT4%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT5%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT5%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT6%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT6%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT7%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT7%)', drawtext=fontfile=C\\:/Windows/Fonts/Arial.ttf: \ text='%tagT8%': fontcolor=white: fontsize=60: box=1: boxcolor=black@0: \ boxborderw=5: x=(w-text_w)/2: y=(h-text_h):enable='between(t,%timeT8%)'" -qscale 0 -codec:a copy videos\videoTag8.avi
 	goto :start2
 	:Q
 	exit
