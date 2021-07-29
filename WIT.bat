@@ -50,6 +50,8 @@
 	@echo [95m[8][0m Place a timed tag in video (avi)
     @echo [95m[9][0m Quit
 	@echo.
+	if not exist videos (mkdir videos)
+	if not exist frames (mkdir frames)
     set /a one=1
     set /a two=2
 	set /a three=3
