@@ -1,5 +1,5 @@
-:: WITCHCRAFT IMAGE TOOLKIT VERSION 1.8-2019
-:: Copyright (c) 2021 Gabriel Torelli.
+:: WITCHCRAFT IMAGE TOOLKIT VERSION 1.9-2023
+:: Copyright (c) 2023 Gabriel Torelli.
 ::  
 :: This program is free software: you can redistribute it and/or modify  
 :: it under the terms of the GNU General Public License as published by  
@@ -84,7 +84,7 @@
 	:X
 	set /p framerate=Enter the framerate (FPS):
 	set /p filename=Enter the filename in "videos" directory:
-	ffmpeg -i videos\%filename%.avi -r %framerate% videos\%%02d.jpg
+	ffmpeg -i videos\%filename%.avi -q:v 1 -r %framerate% videos\%%02d.jpg
 	goto :start2
 	
 	:I
